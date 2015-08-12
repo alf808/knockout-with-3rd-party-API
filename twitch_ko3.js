@@ -9,6 +9,9 @@ var ViewModel = function() {
 	self.records = ko.observableArray();
   self.onlineUsers = ko.observableArray();
   self.offlineUsers = ko.observableArray();
+	self.navtabs = ['AllUsers', 'Online', 'Offline'];
+	self.navTabId = ko.observable('AllUsers');
+	self.goToFolder = function(folder) { self.navTabId(folder); };
 
 	var Record = function(name,logo,status,streamTitle,username) {
 		var self = this;
@@ -42,7 +45,7 @@ var ViewModel = function() {
 				obj.logo = data.logo || 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/326176/person-placeholder.jpg';
 
 				var tr = new Record(obj.name, obj.logo, obj.status, obj.streamTitle, obj.username);
-				temprecords.push(tr);
+//				temprecords.push(tr);
 
         self.records.push(tr);
 				if (streaming) {
@@ -55,8 +58,16 @@ var ViewModel = function() {
 	});
 
 	self.nameSearch = ko.observable('');
+	var twusers = [];
 	self.filteredRecords = ko.computed(function() {
-		return ko.utils.arrayFilter(self.records(), function(r) {
+		if (self.navTabId() === 'AllUsers') {
+			twusers = self.records();
+		} else if (self.navTabId() === 'Online') {
+			twusers = self.onlineUsers();
+		} else {
+			twusers = self.offlineUsers();
+		}
+		return ko.utils.arrayFilter(twusers, function(r) {
 			return r.name().toLowerCase().indexOf(self.nameSearch().toLowerCase()) >= 0;
 		});
 	});
