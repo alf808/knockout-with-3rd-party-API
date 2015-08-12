@@ -9,8 +9,8 @@ var ViewModel = function() {
 	self.records = ko.observableArray();
   self.onlineUsers = ko.observableArray();
   self.offlineUsers = ko.observableArray();
-	self.navtabs = ['AllUsers', 'Online', 'Offline'];
-	self.navTabId = ko.observable('AllUsers');
+	self.navtabs = ['All Users', 'Online', 'Offline'];
+	self.navTabId = ko.observable('All Users');
 	self.goToFolder = function(folder) { self.navTabId(folder); };
 
 	var Record = function(name,logo,status,streamTitle,username) {
@@ -46,7 +46,6 @@ var ViewModel = function() {
 
 				var tr = new Record(obj.name, obj.logo, obj.status, obj.streamTitle, obj.username);
 //				temprecords.push(tr);
-
         self.records.push(tr);
 				if (streaming) {
 					 self.onlineUsers.push(tr);
@@ -60,7 +59,7 @@ var ViewModel = function() {
 	self.nameSearch = ko.observable('');
 	var twusers = [];
 	self.filteredRecords = ko.computed(function() {
-		if (self.navTabId() === 'AllUsers') {
+		if (self.navTabId() === 'All Users') {
 			twusers = self.records();
 		} else if (self.navTabId() === 'Online') {
 			twusers = self.onlineUsers();
